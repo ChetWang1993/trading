@@ -18,7 +18,7 @@ while(True):
         t.volume = 0                 # 今天总成交量
         t.openInterest = 0           # 持仓量
         if not '.' in tick['timestamp']:
-            t.datetime = datetime.strptime(tick['timestamp'], '%Y-%m-%dT%H:%M:%S.000Z')
+            t.datetime = datetime.strptime(tick['timestamp'], '%Y-%m-%dT%H:%M:%SZ')
         else:
             t.datetime = datetime.strptime(tick['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
         strat.onTick(t)

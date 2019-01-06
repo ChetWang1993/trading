@@ -94,7 +94,7 @@ class testStrategy():
             print("[INFO]: %s today kline"%(self.__dict__['okSymbol']))
             print('[INFO]: open: {}\thigh: {}\tlow: {}\tclose: {}'.format(klinesT[1],
                 klinesT[2], klinesT[3], klinesT[4]))
-            print(klinesT)
+
             self.dayOpen = float(klinesT[1])
             self.dayHigh = float(klinesT[2])
             self.dayLow = float(klinesT[3])
@@ -114,11 +114,9 @@ class testStrategy():
         bar.open = float(bar.open); bar.close = float(bar.close); bar.high = float(bar.high); bar.low = float(bar.low)
         ts = bar.datetime.replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
 
-        print("--------------")
-        print("%s %s h: %f, l: %f, o: %f, c: %f" % (str(ts), self.__dict__['okSymbol'], 
-            bar.high, bar.low, bar.open, bar.close))
-        print("{} long entry: {}, short entry: {}, range: {}, trade_price: {}".format(self.__dict__['okSymbol'],
-            self.longEntry, self.shortEntry, self.range, self.trade_price))
+        print("------------------")
+        print("[INFO]: {}\t{}\tbar close: {}\tlong entry: {}\tshort entry: {}\trange: {}\ttrade price: {}".format(str(ts),
+            self.__dict__['okSymbol'], bar.close, self.longEntry, self.shortEntry, self.range, self.trade_price))
 
         self.cancelAll()
         self.updatePos()
@@ -134,7 +132,7 @@ class testStrategy():
             # 如果已经初始化
             if self.dayHigh:
                 self.range = self.dayHigh - self.dayLow
-                print("bo %f k1 %f k2 %f range %f" % (bar.open, self.k1, self.k2, self.range))
+                print("[INFO]: bar open: {}\tk1: {}\tk2: {}\trange: {}".format(bar.open, self.k1, self.k2, self.range))
                 self.longEntry = bar.open + self.k1 * self.range
                 self.shortEntry = bar.open - self.k2 * self.range
             self.dayOpen = bar.open
@@ -185,11 +183,11 @@ class testStrategy():
             else:
                 self.trade_price = 0
         except IndexError:
-            print("%s get pos error"%(self.__dict__['okSymbol']))
+            print("[ERROR]: %s get pos error"%(self.__dict__['okSymbol']))
             self.longPos = 0.0
             self.shortPos = 0.0
             self.trade_price = 0
-        print("%s long pos: %f short pos %f"%(self.okSymbol, self.longPos, self.shortPos))
+        print("[INFO]: %s long pos: %f short pos %f"%(self.okSymbol, self.longPos, self.shortPos))
 
     def cancelAll(self):
         res = self.okApi.get_okex("/api/futures/v3/orders/" + self.okSymbol)['order_info']
