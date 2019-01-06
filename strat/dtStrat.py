@@ -25,6 +25,9 @@ class testStrategy():
     range = 0.0
     longEntry = 0.0
     shortEntry = 0.0
+    cut_loss = 1
+    trade_price = 0.0
+
     apiKey = ""
     secretKey = ""
 
@@ -37,8 +40,8 @@ class testStrategy():
                  'okSymbol',
                  'k1',
                  'k2',
-                 'initDays',
-                 'fixedSize']
+                 'fixedSize',
+                 'cut_loss']
 
     # 变量列表，保存了变量的名称
     varList = ['inited',
@@ -109,6 +112,7 @@ class testStrategy():
         print("--------------")
         self.cancelAll()
         self.updatePos()
+        self.update_trade_px()
         self.barList.append(bar)
         if len(self.barList) < 2:
             return
@@ -134,7 +138,8 @@ class testStrategy():
         ts = bar.datetime.replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
         print(ts)
         print("%s %s h: %f, l: %f, o: %f, c: %f" % (str(ts), self.__dict__['okSymbol'], bar.high, bar.low, bar.open, bar.close))
-        print("%s long entry: %f, short entry: %f, range: %f" % (self.__dict__['okSymbol'], self.longEntry, self.shortEntry, self.range))
+        print("{} long entry: {}, short entry: {}, range: {}, trade_price: {}".format(self.__dict__['okSymbol'],
+            self.longEntry, self.shortEntry, self.range, self.trade_price))
 
         if self.longPos == 0.0 and self.shortPos == 0.0:
             if bar.close > self.dayOpen and bar.close >= self.longEntry:
@@ -145,14 +150,22 @@ class testStrategy():
         # 持有多头仓位
         elif self.longPos > 0.0:
             # 多头止损单
-            if bar.close <= self.shortEntry:
+            is_reverse = bar.close <= self.shortEntry
+            is_cut_loss = self.trade_price != 0 and BUY * (bar.close - self.trade_price) / bar.close >= self.cut_loss
+            if is_reverse or is_cut_loss:
+                px = self.shortEntry if is_reverse else bar.close
                 self.order(self.longEntry, int(self.longPos), SELL)
+            if is_reverse:
                 self.order(self.shortEntry, self.fixedSize, SHORT)
         # 持有空头仓位
         elif self.shortPos > 0.0:
             # 空头止损单
-            if bar.close >= self.longEntry:
+            is_reverse = bar.close >= self.longEntry
+            is_cut_loss = self.trade_price != 0 and SELL * (bar.close - self.trade_price) / bar.close >= self.cut_loss
+            if is_reverse or is_cut_loss:
+                px = self.longEntry if is_reverse else bar.close
                 self.order(self.longEntry, int(self.shortPos), COVER)
+            if is_reverse:
                 self.order(self.shortEntry, self.fixedSize, BUY)
       # 发出状态更新事件
         #self.putEvent()
@@ -162,10 +175,17 @@ class testStrategy():
             balance = self.okApi.get_okex("/api/futures/v3/" + self.okSymbol + "/position");
             self.longPos =  float(balance['holding'][0]['long_avail_qty'])
             self.shortPos = float(balance['holding'][0]['short_avail_qty'])
+            if self.longPos != 0:
+                self.tradePrice = balance['holding'][0]['long_avg_cost']
+            elif self.shortPos != 0:
+                self.tradePrice = balance['holding'][0]['short_avg_cost']
+            else:
+                self.tradePrice = 0
         except IndexError:
             print("%s get pos error"%(self.__dict__['okSymbol']))
             self.longPos = 0.0
             self.shortPos = 0.0
+            self.tradePrice = 0
         print("%s long pos: %f short pos %f"%(self.okSymbol, self.longPos, self.shortPos))
 
     def cancelAll(self):

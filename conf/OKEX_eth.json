@@ -7,5 +7,6 @@
     "k1": 0.6,
     "k2": 0.4,
     "currency": "eth",
-    "logFile": "order_eth.log"
+    "logFile": "order_eth.log",
+    "cut_loss": 0.02
 }
