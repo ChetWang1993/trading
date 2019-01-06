@@ -23,15 +23,16 @@ class okApi():
                 paramStr += (key + '=' + params[key] + '&')
             paramStr = paramStr[:-1]
         print(requestPath)
-        #timestamp = requests.get(base_url + '/api/general/v3/time').json()['iso']
-        max_times = 10
-        for i in range(max_times):
-            try:
-                timestamp = datetime.now().replace(tzinfo = timezone('Asia/Singapore')).astimezone(timezone('GMT')).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-            except:
-                continue
-            finally:
-                break
+        timestamp = requests.get(base_url + '/api/general/v3/time').json()['iso']
+        print(timestamp)
+        #max_times = 10
+        # for i in range(max_times):
+        #     try:
+                 # timestamp = datetime.now().replace(tzinfo = timezone('Asia/Singapore')).astimezone(timezone('GMT')).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+            # except:
+            #     continue
+            # finally:
+            #     break
         header = get_header(self.apiKey, signature(self.secretKey, timestamp, 'GET', requestPath), timestamp, passphrase)
 
         res = requests.get(base_url + requestPath + paramStr, headers=header).json()
