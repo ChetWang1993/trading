@@ -8,7 +8,7 @@
     "k1": 0.6,
     "k2": 0.6,
     "currency": "eos",
-    "order_log_dir": "/log/order/{}/",
+    "order_log_dir": "/root/trading/log/order/{}/",
     "order_log_name": "{}.log",
     "cut_loss": 0.02
 }
