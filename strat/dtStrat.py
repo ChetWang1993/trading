@@ -135,7 +135,6 @@ class testStrategy():
             self.dayLow = min(self.dayLow, bar.low)
         
         ts = bar.datetime.replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
-        print(ts)
         print("%s %s h: %f, l: %f, o: %f, c: %f" % (str(ts), self.__dict__['okSymbol'], bar.high, bar.low, bar.open, bar.close))
         print("{} long entry: {}, short entry: {}, range: {}, trade_price: {}".format(self.__dict__['okSymbol'],
             self.longEntry, self.shortEntry, self.range, self.trade_price))
@@ -174,6 +173,7 @@ class testStrategy():
             balance = self.okApi.get_okex("/api/futures/v3/" + self.okSymbol + "/position");
             self.longPos =  float(balance['holding'][0]['long_avail_qty'])
             self.shortPos = float(balance['holding'][0]['short_avail_qty'])
+            print(balance)
             if self.longPos != 0:
                 self.tradePrice = balance['holding'][0]['long_avg_cost']
             elif self.shortPos != 0:

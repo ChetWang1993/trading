@@ -12,7 +12,7 @@ def signature(secretKey, timestamp, method, request_path, body={}):
     if str(body) == '{}' or str(body) == 'None':
         body = ''
     message = str(timestamp) + str.upper(method) + request_path + str(body)
-    if method == 'POST':
+    if method == 'POST' and constants.order_str in message:
         print(message)
     mac = hmac.new(secretKey, message, digestmod=hashlib.sha256)
     d = mac.digest()
