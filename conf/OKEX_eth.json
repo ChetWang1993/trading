@@ -9,6 +9,6 @@
     "k2": 0.7,
     "currency": "eth",
     "order_log_dir": "/log/order/{}/",
-    "order_log_eth": "{}.log",
+    "order_log_name": "{}.log",
     "cut_loss": 0.02
 }
