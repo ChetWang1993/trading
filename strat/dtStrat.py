@@ -175,11 +175,10 @@ class testStrategy():
             balance = self.okApi.get_okex("/api/futures/v3/" + self.okSymbol + "/position");
             self.longPos =  float(balance['holding'][0]['long_avail_qty'])
             self.shortPos = float(balance['holding'][0]['short_avail_qty'])
-            print(balance)
             if self.longPos != 0:
-                self.trade_price = balance['holding'][0]['long_avg_cost']
+                self.trade_price = float(balance['holding'][0]['long_avg_cost'])
             elif self.shortPos != 0:
-                self.trade_price = balance['holding'][0]['short_avg_cost']
+                self.trade_price = float(balance['holding'][0]['short_avg_cost'])
             else:
                 self.trade_price = 0
         except IndexError:
@@ -192,7 +191,6 @@ class testStrategy():
     def cancelAll(self):
         res = self.okApi.get_okex("/api/futures/v3/orders/" + self.okSymbol)['order_info']
         orderIds = [x['order_id'] for x in res]
-        print('order ids: %s' % str(orderIds))
         self.okApi.post_okex("/api/futures/v3/cancel_batch_orders/" + self.okSymbol, {"order_ids": orderIds})
 
     def order(self, price, size, orderType, matchPrice='1'):
