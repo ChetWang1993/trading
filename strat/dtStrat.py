@@ -36,7 +36,7 @@ class testStrategy():
                  'secretKey',
                  'logFile',
                  'author',
-                 'vtSymbol',
+                 'symbol',
                  'okSymbol',
                  'k1',
                  'k2',
@@ -65,7 +65,7 @@ class testStrategy():
                 if key in setting:
                     d[key] = setting[key]
         print('[INFO]: strat init')
-        self.okApi = okApi(self.apiKey, self.secretKey, self.logFile)
+        self.okApi = okApi(self.apiKey, self.secretKey, self.logFile.format(self.symbol, datetime.now()))
         # 载入历史数据，并采用回放计算的方式初始化策略数值
         self.initPrice()
         #self.putEvent()
@@ -114,7 +114,7 @@ class testStrategy():
         bar.open = float(bar.open); bar.close = float(bar.close); bar.high = float(bar.high); bar.low = float(bar.low)
         ts = bar.datetime.replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
 
-        print("------------------")
+        print("------------------------------------------------------------------")
         print("[INFO]: {}\t{}\tbar close: {}\tlong entry: {}\tshort entry: {}\trange: {}\ttrade price: {}".format(str(ts),
             self.__dict__['okSymbol'], bar.close, self.longEntry, self.shortEntry, self.range, self.trade_price))
 

@@ -13,7 +13,7 @@ class okApi():
     def __init__(self, apiKey, secretKey, logFile):
         self.apiKey = str(apiKey)
         self.secretKey = str(secretKey)
-        self.logFile = pwd + '/log/' + logFile
+        self.logFile = pwd + logFile
 
     def get_okex(self, requestPath, params = {}):
         paramStr = ''
