@@ -35,7 +35,7 @@ class okApi():
         header = get_header(self.apiKey, signature(self.secretKey, timestamp, 'POST', requestPath, body), timestamp, passphrase)
         res = requests.post(base_url + requestPath, headers=header, data=body).json()
         ts = datetime.strptime(timestamp.split('.')[0],'%Y-%m-%dT%H:%M:%S').replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
-        if constants.order_str in requestPath:
+        if order_str in requestPath:
             log.write(str(ts) + '\tPOST' + requestPath + str(body) + '\n' + str(res) + '\n')
         log.close()
         return res
