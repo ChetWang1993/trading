@@ -4,7 +4,7 @@
 	"fixedSize": 600,
     "symbols": ["btc_usd", "ltc_usd", "eth_usd", "etc_usd", "bch_usd", "xrp_usd", "eos_usd"],
     "okSymbol": "EOS-USD-190329",
-    "symbol": "EOS"
+    "symbol": "EOS",
     "k1": 0.6,
     "k2": 0.6,
     "currency": "eos",
