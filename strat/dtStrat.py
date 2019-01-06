@@ -176,10 +176,10 @@ class testStrategy():
             print(balance)
             if self.longPos != 0:
                 self.tradePrice = balance['holding'][0]['long_avg_cost']
-                print(balance['holding'][0]['long_avg_cost'])
+                print('{}\t{}'.format(self.tradePrice, balance['holding'][0]['long_avg_cost']))
             elif self.shortPos != 0:
                 self.tradePrice = balance['holding'][0]['short_avg_cost']
-                print(balance['holding'][0]['short_avg_cost'])
+                print('{}\t{}'.format(self.tradePrice, balance['holding'][0]['short_avg_cost']))
             else:
                 self.tradePrice = 0
         except IndexError:
