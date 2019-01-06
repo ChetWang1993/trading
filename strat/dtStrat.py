@@ -34,8 +34,8 @@ class testStrategy():
     # 参数列表，保存了参数的名称
     paramList = ['apiKey',
                  'secretKey',
-                 'logFile',
-                 'author',
+                 'order_log_dir',
+                 'order_log_name',
                  'symbol',
                  'okSymbol',
                  'k1',
@@ -65,7 +65,10 @@ class testStrategy():
                 if key in setting:
                     d[key] = setting[key]
         print('[INFO]: strat init')
-        self.okApi = okApi(self.apiKey, self.secretKey, self.logFile.format(self.symbol, datetime.now()))
+        if not os.path.exists(self.order_log_dir):
+            os.makedirs(order_log_dir)
+        self.okApi = okApi(self.apiKey, self.secretKey,
+            self.order_log_dir.format(self.symbol) + self.order_log_name.format(datetime.now()))
         # 载入历史数据，并采用回放计算的方式初始化策略数值
         self.initPrice()
         #self.putEvent()
