@@ -1,0 +1,13 @@
+# encoding: UTF-8
+passphrase = 'fmttm1993'
+base_url = 'https://www.okex.com'
+CONTENT_TYPE = 'Content-Type'
+OK_ACCESS_KEY = 'OK-ACCESS-KEY'
+OK_ACCESS_SIGN = 'OK-ACCESS-SIGN'
+OK_ACCESS_TIMESTAMP = 'OK-ACCESS-TIMESTAMP'
+OK_ACCESS_PASSPHRASE = 'OK-ACCESS-PASSPHRASE'
+APPLICATION_JSON = 'application/json'
+BUY = '1'
+SELL = '3'
+SHORT = '2'
+COVER = '4'

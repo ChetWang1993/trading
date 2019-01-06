@@ -1,0 +1,11 @@
+{
+    "apiKey": "46ec7f22-5967-49d7-bb9b-da83f5299a44",
+    "secretKey": "83A046F204CCDD73C78B85125914003F",
+    "fixedSize": 700,
+    "symbols": ["btc_usd", "ltc_usd", "eth_usd", "etc_usd", "bch_usd", "xrp_usd", "eos_usd"],
+    "okSymbol": "ETH-USD-190329",
+    "k1": 0.6,
+    "k2": 0.4,
+    "currency": "eth",
+    "logFile": "order_eth.log"
+}

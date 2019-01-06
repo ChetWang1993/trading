@@ -1,0 +1,11 @@
+{
+	"apiKey": "f4437433-0378-4535-8ba6-1fdffce6cea5",
+	"secretKey": "589CCC3715DE217F935343DD2F4EE06E",
+	"fixedSize": 600,
+    "symbols": ["btc_usd", "ltc_usd", "eth_usd", "etc_usd", "bch_usd", "xrp_usd", "eos_usd"],
+    "okSymbol": "EOS-USD-190329",
+    "k1": 0.65,
+    "k2": 0.35,
+    "currency": "eos",
+    "logFile": "order_dy.log"
+}
