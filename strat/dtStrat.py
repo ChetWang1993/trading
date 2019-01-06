@@ -173,7 +173,6 @@ class testStrategy():
     def updatePos(self):
         try:
             balance = self.okApi.get_okex("/api/futures/v3/" + self.okSymbol + "/position");
-            print(balance)
             self.longPos =  float(balance['holding'][0]['long_avail_qty'])
             self.shortPos = float(balance['holding'][0]['short_avail_qty'])
             if self.longPos != 0:

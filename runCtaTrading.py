@@ -17,10 +17,11 @@ while(True):
         t.lastPrice = tick['last']           # 最新成交价
         t.volume = 0                 # 今天总成交量
         t.openInterest = 0           # 持仓量
-        t.datetime = datetime.strptime(tick['timestamp'], '%Y-%m-%dT%H:%M:%S.%3fZ')
+        print()
+        t.datetime = datetime.strptime(tick['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
         strat.onTick(t)
     except Exception as e:
         print('[ERROR]: {}'.format(e))
-        sleep(1)
+        time.sleep(1)
         continue
     time.sleep(1)
