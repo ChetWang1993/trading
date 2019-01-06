@@ -69,7 +69,7 @@ class testStrategy():
         print('[INFO]: strat init')
         print('[INFO]: fixed size: {}\tk1: {}\tk2: {}\tcut_loss: {}'.format(self.fixedSize,
             self.k1, self.k2, self.cut_loss))
-        if not os.path.exists(self.order_log_dir):
+        if not os.path.exists(self.order_log_dir.format(self.symbol)):
             os.makedirs(self.order_log_dir)
         self.okApi = okApi(self.apiKey, self.secretKey,
             self.order_log_dir.format(self.symbol) + self.order_log_name.format(datetime.now().strftime('%Y%m%d')))
