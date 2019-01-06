@@ -112,7 +112,6 @@ class testStrategy():
         print("--------------")
         self.cancelAll()
         self.updatePos()
-        self.update_trade_px()
         self.barList.append(bar)
         if len(self.barList) < 2:
             return
