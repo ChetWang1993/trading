@@ -4,11 +4,13 @@ sys.path.append('./strat')
 from dtStrat import *
 from func import *
 import json
+from datetime import datetime
 
 settingFileName = sys.argv[1]
 setting = json.load(open('conf/' + settingFileName))
 strat = testStrategy(setting)
-okApi = okApi(setting['apiKey'], setting['secretKey'], setting['logFile'])
+okApi = okApi(setting['apiKey'], setting['secretKey'], 
+    setting['order_log_dir'].format(setting['symbol']) + setting['order_log_name'].format(datetime.now()))
 while(True):
     try:
     	tick = okApi.get_okex("/api/futures/v3/instruments/" + setting['okSymbol'] + "/ticker")

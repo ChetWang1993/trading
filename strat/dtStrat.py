@@ -11,6 +11,8 @@ class testStrategy():
     fixedSize = 0
     k1 = 0.6
     k2 = 0.4
+    order_log_dir = ''
+    order_log_name = ''
 
     initDays = 0
     longPos = 0.0
