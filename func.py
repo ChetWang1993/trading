@@ -22,6 +22,7 @@ class okApi():
             for key in params:
                 paramStr += (key + '=' + params[key] + '&')
             paramStr = paramStr[:-1]
+        print(requests.get(base_url + '/api/general/v3/time').json())
         timestamp = requests.get(base_url + '/api/general/v3/time').json()['iso']
         
         header = get_header(self.apiKey, signature(self.secretKey, timestamp, 'GET', requestPath), timestamp, passphrase)
