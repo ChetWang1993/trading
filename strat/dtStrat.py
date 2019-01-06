@@ -70,7 +70,7 @@ class testStrategy():
         print('[INFO]: fixed size: {}\tk1: {}\tk2: {}\tcut_loss: {}'.format(self.fixedSize,
             self.k1, self.k2, self.cut_loss))
         if not os.path.exists(self.order_log_dir.format(self.symbol)):
-            os.makedirs(self.order_log_dir)
+            os.makedirs(self.order_log_dir.format(self.symbol))
         self.okApi = okApi(self.apiKey, self.secretKey,
             self.order_log_dir.format(self.symbol) + self.order_log_name.format(datetime.now().strftime('%Y%m%d')))
         # 载入历史数据，并采用回放计算的方式初始化策略数值
