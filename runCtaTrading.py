@@ -19,6 +19,6 @@ while(True):
         t.openInterest = 0           # 持仓量
         t.datetime = datetime.strptime(tick['timestamp'].split('.')[0], '%Y-%m-%dT%H:%M:%S')
     except Exception as e:
-	print(e)
+        print(e)
         continue
     time.sleep(1)
