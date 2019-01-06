@@ -175,18 +175,16 @@ class testStrategy():
             self.shortPos = float(balance['holding'][0]['short_avail_qty'])
             print(balance)
             if self.longPos != 0:
-                self.tradePrice = balance['holding'][0]['long_avg_cost']
-                print('{}\t{}'.format(self.tradePrice, balance['holding'][0]['long_avg_cost']))
+                self.trade_price = balance['holding'][0]['long_avg_cost']
             elif self.shortPos != 0:
-                self.tradePrice = balance['holding'][0]['short_avg_cost']
-                print('{}\t{}'.format(self.tradePrice, balance['holding'][0]['short_avg_cost']))
+                self.trade_price = balance['holding'][0]['short_avg_cost']
             else:
-                self.tradePrice = 0
+                self.trade_price = 0
         except IndexError:
             print("%s get pos error"%(self.__dict__['okSymbol']))
             self.longPos = 0.0
             self.shortPos = 0.0
-            self.tradePrice = 0
+            self.trade_price = 0
         print("%s long pos: %f short pos %f"%(self.okSymbol, self.longPos, self.shortPos))
 
     def cancelAll(self):
