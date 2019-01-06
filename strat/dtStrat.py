@@ -64,7 +64,7 @@ class testStrategy():
             for key in self.paramList:
                 if key in setting:
                     d[key] = setting[key]
-        print(u'strat init')
+        print('[INFO]: strat init')
         self.okApi = okApi(self.apiKey, self.secretKey, self.logFile)
         # 载入历史数据，并采用回放计算的方式初始化策略数值
         self.initPrice()
@@ -151,7 +151,7 @@ class testStrategy():
         elif self.longPos > 0.0:
             # 多头止损单
             is_reverse = bar.close <= self.shortEntry
-            is_cut_loss = self.trade_price != 0 and BUY * (bar.close - self.trade_price) / bar.close >= self.cut_loss
+            is_cut_loss = self.trade_price != 0 and BUY_SIDE * (bar.close - self.trade_price) / bar.close >= self.cut_loss
             if is_reverse or is_cut_loss:
                 px = self.shortEntry if is_reverse else bar.close
                 self.order(self.longEntry, int(self.longPos), SELL)
@@ -161,7 +161,7 @@ class testStrategy():
         elif self.shortPos > 0.0:
             # 空头止损单
             is_reverse = bar.close >= self.longEntry
-            is_cut_loss = self.trade_price != 0 and SELL * (bar.close - self.trade_price) / bar.close >= self.cut_loss
+            is_cut_loss = self.trade_price != 0 and SELL_SIDE * (bar.close - self.trade_price) / bar.close >= self.cut_loss
             if is_reverse or is_cut_loss:
                 px = self.longEntry if is_reverse else bar.close
                 self.order(self.longEntry, int(self.shortPos), COVER)

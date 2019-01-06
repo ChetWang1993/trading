@@ -11,4 +11,6 @@ BUY = '1'
 SELL = '3'
 SHORT = '2'
 COVER = '4'
+BUY_SIDE = -1
+SELL_SIDE = 1
 order_str = '/api/futures/v3/order'
