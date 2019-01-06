@@ -110,6 +110,11 @@ class testStrategy():
         # 撤销之前发出的尚未成交的委托（包括限价单和停止单
         bar.open = float(bar.open); bar.close = float(bar.close); bar.high = float(bar.high); bar.low = float(bar.low)
         print("--------------")
+        print("%s %s h: %f, l: %f, o: %f, c: %f" % (str(ts), self.__dict__['okSymbol'], 
+            bar.high, bar.low, bar.open, bar.close))
+        print("{} long entry: {}, short entry: {}, range: {}, trade_price: {}".format(self.__dict__['okSymbol'],
+            self.longEntry, self.shortEntry, self.range, self.trade_price))
+ 
         self.cancelAll()
         self.updatePos()
         self.barList.append(bar)
@@ -135,9 +140,6 @@ class testStrategy():
             self.dayLow = min(self.dayLow, bar.low)
         
         ts = bar.datetime.replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
-        print("%s %s h: %f, l: %f, o: %f, c: %f" % (str(ts), self.__dict__['okSymbol'], bar.high, bar.low, bar.open, bar.close))
-        print("{} long entry: {}, short entry: {}, range: {}, trade_price: {}".format(self.__dict__['okSymbol'],
-            self.longEntry, self.shortEntry, self.range, self.trade_price))
 
         if self.longPos == 0.0 and self.shortPos == 0.0:
             if bar.close > self.dayOpen and bar.close >= self.longEntry:
