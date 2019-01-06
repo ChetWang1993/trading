@@ -86,21 +86,24 @@ class testStrategy():
             yyd = (datetime.now() - timedelta(2)).replace(hour=0, minute=0, second=0, microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
             yd = (datetime.now() - timedelta(1)).replace(hour=0, minute=0, second=0, microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
             td = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
-            klinesY = self.okApi.get_okex("/api/futures/v3/instruments/" + self.okSymbol + "/candles", {'start': yyd, 'end': yd, 'granularity': '86400'})
-            klinesT = self.okApi.get_okex("/api/futures/v3/instruments/" + self.okSymbol + "/candles", {'start': yd, 'end': td, 'granularity': '86400'})
-            print("%s yesterday kline"%(self.__dict__['okSymbol']))
-            print(klinesY)
-            print("%s today kline"%(self.__dict__['okSymbol']))
+            klinesY = self.okApi.get_okex("/api/futures/v3/instruments/" + self.okSymbol + "/candles", {'start': yyd, 'end': yd, 'granularity': '86400'})[0]
+            klinesT = self.okApi.get_okex("/api/futures/v3/instruments/" + self.okSymbol + "/candles", {'start': yd, 'end': td, 'granularity': '86400'})[0]
+            print("[INFO]: %s yesterday kline"%(self.__dict__['okSymbol']))
+            print('[INFO]: open: {}\thigh: {}\tlow: {}\tclose: {}'.format(klinesY[1],
+                klinesY[2], klinesY[3], klinesY[4]))
+            print("[INFO]: %s today kline"%(self.__dict__['okSymbol']))
+            print('[INFO]: open: {}\thigh: {}\tlow: {}\tclose: {}'.format(klinesT[1],
+                klinesT[2], klinesT[3], klinesT[4]))
             print(klinesT)
-            self.dayOpen = float(klinesT[0][1])
-            self.dayHigh = float(klinesT[0][2])
-            self.dayLow = float(klinesT[0][3])
-            self.dayClose = float(klinesT[0][4])
-            self.range = float(klinesY[0][2]) - float(klinesY[0][3])
-            self.longEntry = float(klinesT[0][1]) + self.k1 * self.range
-            self.shortEntry = float(klinesT[0][1]) - self.k2 * self.range
+            self.dayOpen = float(klinesT[1])
+            self.dayHigh = float(klinesT[2])
+            self.dayLow = float(klinesT[3])
+            self.dayClose = float(klinesT[4])
+            self.range = float(klinesY[2]) - float(klinesY[3])
+            self.longEntry = float(klinesT[1]) + self.k1 * self.range
+            self.shortEntry = float(klinesT[1]) - self.k2 * self.range
         except KeyError:
-            print("%s get kline error"%(self.__dict__['okSymbol']))
+            print("[ERROR]: %s get kline error"%(self.__dict__['okSymbol']))
             return 0.0 
         return 0.0        
 
