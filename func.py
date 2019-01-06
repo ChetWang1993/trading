@@ -22,28 +22,24 @@ class okApi():
             for key in params:
                 paramStr += (key + '=' + params[key] + '&')
             paramStr = paramStr[:-1]
-        print(requestPath)
-        timestamp = requests.get(base_url + '/api/general/v3/time').json()['iso']
-        print(timestamp)
-        #max_times = 10
-        # for i in range(max_times):
-        #     try:
-                 # timestamp = datetime.now().replace(tzinfo = timezone('Asia/Singapore')).astimezone(timezone('GMT')).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-            # except:
-            #     continue
-            # finally:
-            #     break
-        header = get_header(self.apiKey, signature(self.secretKey, timestamp, 'GET', requestPath), timestamp, passphrase)
-
-        res = requests.get(base_url + requestPath + paramStr, headers=header).json()
+        try:
+            timestamp = requests.get(base_url + '/api/general/v3/time').json()['iso']
+            header = get_header(self.apiKey, signature(self.secretKey, timestamp, 'GET', requestPath),
+                timestamp, passphrase)
+            res = requests.get(base_url + requestPath + paramStr, headers=header).json()
+        except Exception as e:
+            print('[ERROR]: {}'.format(e))
         return res
 
     def post_okex(self, requestPath, params = {}):
         log = open(self.logFile, "a")
-        timestamp = requests.get(base_url + '/api/general/v3/time').json()['iso']
-        body = json.dumps(params)
-        header = get_header(self.apiKey, signature(self.secretKey, timestamp, 'POST', requestPath, body), timestamp, passphrase)
-        res = requests.post(base_url + requestPath, headers=header, data=body).json()
+        try:
+            timestamp = requests.get(base_url + '/api/general/v3/time').json()['iso']
+            body = json.dumps(params)
+            header = get_header(self.apiKey, signature(self.secretKey, timestamp, 'POST', requestPath, body), timestamp, passphrase)
+            res = requests.post(base_url + requestPath, headers=header, data=body).json()
+        except Exception as e:
+            print('[ERROR]: {}'.format(e))
         ts = datetime.strptime(timestamp.split('.')[0],'%Y-%m-%dT%H:%M:%S').replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
         if order_str in requestPath:
             log.write(str(ts) + '\tPOST' + requestPath + str(body) + '\n' + str(res) + '\n')
