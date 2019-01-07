@@ -120,13 +120,13 @@ class testStrategy():
         # 撤销之前发出的尚未成交的委托（包括限价单和停止单
         bar.open = float(bar.open); bar.close = float(bar.close); bar.high = float(bar.high); bar.low = float(bar.low)
         ts = bar.datetime.replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
+        self.cancelAll()
+        self.updatePos()
 
         print("------------------------------------------------------------------")
         print("[INFO]: {}\t{}\tbar close: {}\tlong entry: {}\tshort entry: {}\trange: {}\ttrade price: {}".format(str(ts),
             self.__dict__['okSymbol'], bar.close, self.longEntry, self.shortEntry, self.range, self.trade_price))
 
-        self.cancelAll()
-        self.updatePos()
         self.barList.append(bar)
         if len(self.barList) < 2:
             return
