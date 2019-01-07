@@ -27,7 +27,7 @@ class okApi():
                 timestamp, passphrase)
             res = requests.get(base_url + requestPath + paramStr, headers=header).json()
         except Exception as e:
-            print('[ERROR]: {}'.format(e))
+            print('[ERROR]: get okex {}'.format(e))
         return res
 
     def post_okex(self, requestPath, params = {}):
@@ -38,7 +38,7 @@ class okApi():
             header = get_header(self.apiKey, signature(self.secretKey, timestamp, 'POST', requestPath, body), timestamp, passphrase)
             res = requests.post(base_url + requestPath, headers=header, data=body).json()
         except Exception as e:
-            print('[ERROR]: {}'.format(e))
+            print('[ERROR]: post okex {}'.format(e))
         ts = datetime.strptime(timestamp.split('.')[0],'%Y-%m-%dT%H:%M:%S').replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
         if order_str in requestPath:
             log.write(str(ts) + '\tPOST' + requestPath + str(body) + '\n' + str(res) + '\n')

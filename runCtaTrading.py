@@ -29,7 +29,7 @@ while(True):
             t.datetime = datetime.strptime(tick['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
         strat.onTick(t)
     except Exception as e:
-        print('[ERROR]: {}'.format(e))
+        print('[ERROR]: get tick {}'.format(e))
         time.sleep(1)
         continue
     time.sleep(1)

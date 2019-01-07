@@ -109,8 +109,8 @@ class testStrategy():
             self.range = float(klinesY[2]) - float(klinesY[3])
             self.longEntry = float(klinesT[1]) + self.k1 * self.range
             self.shortEntry = float(klinesT[1]) - self.k2 * self.range
-        except KeyError:
-            print("[ERROR]: %s get kline error"%(self.__dict__['okSymbol']))
+        except Exception as e:
+            print("[ERROR]: {} get kline error {}"%(self.__dict__['okSymbol'], e))
             return 0.0 
         return 0.0        
 
@@ -179,8 +179,10 @@ class testStrategy():
         #self.putEvent()
 
     def updatePos(self):
+        updatePosCB(self.okApi.get_okex("/api/futures/v3/" + self.okSymbol + "/position"))
+
+    def updatePosCB(self, balance):
         try:
-            balance = self.okApi.get_okex("/api/futures/v3/" + self.okSymbol + "/position");
             self.longPos =  float(balance['holding'][0]['long_qty'])
             self.shortPos = float(balance['holding'][0]['short_qty'])
             if self.longPos != 0:
