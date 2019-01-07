@@ -179,7 +179,7 @@ class testStrategy():
         #self.putEvent()
 
     def updatePos(self):
-        updatePosCB(self.okApi.get_okex("/api/futures/v3/" + self.okSymbol + "/position"))
+        self.updatePosCB(self.okApi.get_okex("/api/futures/v3/" + self.okSymbol + "/position"))
 
     def updatePosCB(self, balance):
         try:

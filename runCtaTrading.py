@@ -10,6 +10,18 @@ settingFileName = sys.argv[1]
 setting = json.load(open('conf/' + settingFileName))
 strat = testStrategy(setting)
 
+def tickCB(tick):
+    t = VtTickData()   
+    # 成交数据
+    t.lastPrice = tick['last']           # 最新成交价
+    t.volume = 0                 # 今天总成交量
+    t.openInterest = 0           # 持仓量
+    if not '.' in tick['timestamp']:
+        t.datetime = datetime.strptime(tick['timestamp'], '%Y-%m-%dT%H:%M:%SZ')
+    else:
+        t.datetime = datetime.strptime(tick['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
+    strat.onTick(t)
+
 if not os.path.exists(setting['order_log_dir'].format(setting['symbol'])):
     os.makedirs(setting['order_log_dir'].format(setting['symbol']))
 
@@ -23,15 +35,3 @@ while(True):
         time.sleep(1)
         continue
     time.sleep(1)
-
-def tickCB(tick):
-    t = VtTickData()   
-    # 成交数据
-    t.lastPrice = tick['last']           # 最新成交价
-    t.volume = 0                 # 今天总成交量
-    t.openInterest = 0           # 持仓量
-    if not '.' in tick['timestamp']:
-        t.datetime = datetime.strptime(tick['timestamp'], '%Y-%m-%dT%H:%M:%SZ')
-    else:
-        t.datetime = datetime.strptime(tick['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
-    strat.onTick(t)
