@@ -181,25 +181,28 @@ class testStrategy():
     def updatePos(self):
         try:
             balance = self.okApi.get_okex("/api/futures/v3/" + self.okSymbol + "/position");
-            self.longPos =  float(balance['holding'][0]['long_avail_qty'])
-            self.shortPos = float(balance['holding'][0]['short_avail_qty'])
+            self.longPos =  float(balance['holding'][0]['long_qty'])
+            self.shortPos = float(balance['holding'][0]['short_qty'])
             if self.longPos != 0:
                 self.trade_price = float(balance['holding'][0]['long_avg_cost'])
             elif self.shortPos != 0:
                 self.trade_price = float(balance['holding'][0]['short_avg_cost'])
             else:
                 self.trade_price = 0
-        except IndexError:
-            print("[ERROR]: %s get pos error"%(self.__dict__['okSymbol']))
+        except Exception as e:
+            print("[ERROR]: {} update pos error {}".format(self.__dict__['okSymbol'], e))
             self.longPos = 0.0
             self.shortPos = 0.0
             self.trade_price = 0
         print("[INFO]: %s long pos: %f short pos %f"%(self.okSymbol, self.longPos, self.shortPos))
 
     def cancelAll(self):
-        res = self.okApi.get_okex("/api/futures/v3/orders/" + self.okSymbol)['order_info']
-        orderIds = [x['order_id'] for x in res]
-        self.okApi.post_okex("/api/futures/v3/cancel_batch_orders/" + self.okSymbol, {"order_ids": orderIds})
+        try:
+            orderIds = [x['order_id'] for x in self.okApi.get_okex("/api/futures/v3/orders/" + self.okSymbol)['order_info']]
+            self.okApi.post_okex("/api/futures/v3/cancel_batch_orders/" + self.okSymbol, {"order_ids": orderIds})
+        except Exception as e:
+            print('[ERROR]: cancel error {}'.format(e))
+            pass
 
     def order(self, price, size, orderType, matchPrice='1'):
         self.okApi.post_okex("/api/futures/v3/order", {"instrument_id": self.okSymbol, "type": orderType, "price": str(price),"size": str(size),"match_price": matchPrice,"leverage":"10"})
