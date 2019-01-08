@@ -110,7 +110,7 @@ class testStrategy():
             self.longEntry = float(klinesT[1]) + self.k1 * self.range
             self.shortEntry = float(klinesT[1]) - self.k2 * self.range
         except Exception as e:
-            print("[ERROR]: {} get kline error {}"%(self.__dict__['okSymbol'], e))
+            print("[ERROR]: {} get kline error {}".format(self.__dict__['okSymbol'], e))
             return 0.0 
         return 0.0        
 
