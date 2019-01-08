@@ -11,6 +11,8 @@ setting = json.load(open('conf/' + settingFileName))
 strat = testStrategy(setting)
 
 def tickCB(tick):
+    if tick == {}:
+        return
     t = VtTickData()   
     # 成交数据
     t.lastPrice = tick['last']           # 最新成交价

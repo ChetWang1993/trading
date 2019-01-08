@@ -27,7 +27,8 @@ class okApi():
                 timestamp, passphrase)
             res = requests.get(base_url + requestPath + paramStr, headers=header).json()
         except Exception as e:
-            print('[ERROR]: get okex {}'.format(e))
+            print('[ERROR]: get okex {}\t{}'.format(requestPath, e))
+            res = {}
         return res
 
     def post_okex(self, requestPath, params = {}):
