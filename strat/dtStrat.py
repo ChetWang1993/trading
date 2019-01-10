@@ -118,6 +118,9 @@ class testStrategy():
     def onBar(self, bar):
         """收到Bar推送（必须由用户继承实现）"""
         # 撤销之前发出的尚未成交的委托（包括限价单和停止单
+        if self.dayOpen == 0:
+            self.initPrice()
+            return
         bar.open = float(bar.open); bar.close = float(bar.close); bar.high = float(bar.high); bar.low = float(bar.low)
         ts = bar.datetime.replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
         self.cancelAll()
@@ -162,9 +165,9 @@ class testStrategy():
             is_cut_loss = self.trade_price != 0 and BUY_SIDE * (bar.close - self.trade_price) / bar.close >= self.cut_loss
             if is_reverse or is_cut_loss:
                 px = self.shortEntry if is_reverse else bar.close
-                self.order(self.longEntry, int(self.longPos), SELL)
+                self.order(bar.Close, int(self.longPos), SELL)
             if is_reverse:
-                self.order(self.shortEntry, self.fixedSize, SHORT)
+                self.order(bar.close, self.fixedSize, SHORT)
         # 持有空头仓位
         elif self.shortPos > 0.0:
             # 空头止损单
@@ -172,9 +175,9 @@ class testStrategy():
             is_cut_loss = self.trade_price != 0 and SELL_SIDE * (bar.close - self.trade_price) / bar.close >= self.cut_loss
             if is_reverse or is_cut_loss:
                 px = self.longEntry if is_reverse else bar.close
-                self.order(self.longEntry, int(self.shortPos), COVER)
+                self.order(bar.close, int(self.shortPos), COVER)
             if is_reverse:
-                self.order(self.shortEntry, self.fixedSize, BUY)
+                self.order(bar.close, self.fixedSize, BUY)
       # 发出状态更新事件
         #self.putEvent()
 
