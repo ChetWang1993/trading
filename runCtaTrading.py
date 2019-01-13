@@ -24,11 +24,7 @@ def tickCB(tick):
         t.datetime = datetime.strptime(tick['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
     strat.onTick(t)
 
-if not os.path.exists(setting['order_log_dir'].format(setting['symbol'])):
-    os.makedirs(setting['order_log_dir'].format(setting['symbol']))
-
-okApi = okApi(setting['apiKey'], setting['secretKey'], 
-    setting['order_log_dir'].format(setting['symbol']) + setting['order_log_name'].format(datetime.now()))
+okApi = okApi(setting['apiKey'], setting['secretKey'], '')
 while(True):
     try:
     	tickCB(okApi.get_okex("/api/futures/v3/instruments/" + setting['okSymbol'] + "/ticker"))

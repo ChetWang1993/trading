@@ -2,7 +2,6 @@
 from HttpMD5Util import signature, get_header
 import time
 import json
-from pytz import timezone
 from constants import *
 import math
 import requests
@@ -32,7 +31,7 @@ class okApi():
         return res
 
     def post_okex(self, requestPath, params = {}):
-        log = open(self.logFile, "a")
+        #log = open(self.logFile, "a")
         try:
             timestamp = requests.get(base_url + '/api/general/v3/time').json()['iso']
             body = json.dumps(params)
@@ -40,9 +39,10 @@ class okApi():
             res = requests.post(base_url + requestPath, headers=header, data=body).json()
         except Exception as e:
             print('[ERROR]: post okex {}'.format(e))
-        ts = datetime.strptime(timestamp.split('.')[0],'%Y-%m-%dT%H:%M:%S').replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
+        ts = datetime.strptime(timestamp.split('.')[0],
+            '%Y-%m-%dT%H:%M:%S').replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
         if order_str in requestPath:
-            log.write(str(ts) + '\tPOST' + requestPath + str(body) + '\n' + str(res) + '\n')
+            print('[INFO]: place order: ' + str(ts) + '\tPOST' + requestPath + str(body) + '\t' + str(res))
         log.close()
         return res
 
