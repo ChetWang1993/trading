@@ -163,7 +163,7 @@ class testStrategy():
             is_cut_loss = self.trade_price != 0 and BUY_SIDE * (bar.close - self.trade_price) / bar.close >= self.cut_loss
             if is_reverse or is_cut_loss:
                 px = self.shortEntry if is_reverse else bar.close
-                self.order(bar.Close, int(self.longPos), SELL)
+                self.order(bar.close, int(self.longPos), SELL)
             if is_reverse:
                 self.order(bar.close, self.fixedSize, SHORT)
         # 持有空头仓位
