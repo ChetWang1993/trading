@@ -33,7 +33,6 @@ class okApi():
         return res
 
     def post_okex(self, requestPath, params = {}):
-        #log = open(self.logFile, "a")
         try:
             timestamp = requests.get(base_url + '/api/general/v3/time').json()['iso']
             body = json.dumps(params)
@@ -45,7 +44,6 @@ class okApi():
             '%Y-%m-%dT%H:%M:%S').replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
         if order_str in requestPath:
             print('[INFO]: place order: ' + str(ts) + '\tPOST' + requestPath + str(body) + '\t' + str(res))
-        log.close()
         return res
 
 #startTime = (datetime.now() - timedelta(1)).replace(hour=0, minute=0, second=0, microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
