@@ -7,6 +7,8 @@ import math
 import requests
 from datetime import datetime, timedelta
 import os
+from pytz import timezone
+
 class okApi():
     def __init__(self, apiKey, secretKey, logFile):
         self.apiKey = str(apiKey)
