@@ -125,8 +125,10 @@ class testStrategy():
         ts = bar.datetime.replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
         self.cancelAll()
         if not self.updatePos():
+            print('[ERROR]: update position failed')
             return
         if not self.updateCapital():
+            print('['ERROR': update capital failed]')
             return
         self.orderQty = self.capital / 10 * self.leverage
 
@@ -186,7 +188,7 @@ class testStrategy():
         #self.putEvent()
 
     def updatePos(self):
-        self.updatePosCB(self.okApi.get_okex("/api/futures/v3/" + self.okSymbol + "/position"))
+        return self.updatePosCB(self.okApi.get_okex("/api/futures/v3/" + self.okSymbol + "/position"))
 
     def updatePosCB(self, balance):
         try:
