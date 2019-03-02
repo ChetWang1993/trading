@@ -211,8 +211,8 @@ class testStrategy():
 
     def updateCapital(self):
         try:
-            res1 = okApi.get_okex("/api/futures/v3/accounts/" + self.currency)
-            res2 = okApi.get_okex("/api/spot/v3/instruments/{}-USDT".format(self.currency.upper()) + "/ticker")
+            res1 = self.okApi.get_okex("/api/futures/v3/accounts/" + self.currency)
+            res2 = self.okApi.get_okex("/api/spot/v3/instruments/{}-USDT".format(self.currency.upper()) + "/ticker")
             self.capital = float(res1['equity'])*float(res2['last'])
             print("[INFO]: {}".format("account capital {}".format(self.capital)))
             return True
