@@ -130,7 +130,7 @@ class testStrategy():
         if not self.updateCapital():
             print('[ERROR]: update capital failed')
             return
-        self.orderQty = self.capital / 10 * self.leverage
+        self.orderQty = int(self.capital / 10 * self.leverage)
 
         print("------------------------------------------------------------------")
         print("[INFO]: {}\t{}\tbar close: {}\tlong entry: {}\tshort entry: {}\trange: {}\ttrade price: {}".format(str(ts),
