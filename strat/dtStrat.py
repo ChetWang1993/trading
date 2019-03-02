@@ -128,7 +128,7 @@ class testStrategy():
             print('[ERROR]: update position failed')
             return
         if not self.updateCapital():
-            print('['ERROR': update capital failed]')
+            print('[ERROR]: update capital failed')
             return
         self.orderQty = self.capital / 10 * self.leverage
 
