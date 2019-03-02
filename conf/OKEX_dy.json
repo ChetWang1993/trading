@@ -1,13 +1,12 @@
 {
 	"apiKey": "f4437433-0378-4535-8ba6-1fdffce6cea5",
 	"secretKey": "589CCC3715DE217F935343DD2F4EE06E",
-	"fixedSize": 400,
-    "symbols": ["btc_usd", "ltc_usd", "eth_usd", "etc_usd", "bch_usd", "xrp_usd", "eos_usd"],
+    "leverage": 2.5,
     "okSymbol": "EOS-USD-190329",
+    "currency": "eos",
     "k1": 0.6,
     "k2": 0.6,
-    "currency": "eos",
     "order_log_dir": "",
     "order_log_name": "",
-    "cut_loss": 0.02
+    "cut_loss": 0.015
 }

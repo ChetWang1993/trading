@@ -8,7 +8,6 @@ from vnpy.trader.vtObject import VtBarData, VtTickData
 ########################################################################
 class testStrategy():
     # 策略参数
-    fixedSize = 0
     k1 = 0.6
     k2 = 0.4
     order_log_dir = ''
@@ -18,8 +17,9 @@ class testStrategy():
     longPos = 0.0
     shortPos = 0.0
     matchPrice = True
+    capital = 0.0
     # 策略变量
-    barList = []                # K线对象的列表
+    barList = []   # K线对象的列表
     dayOpen = 0.0
     dayHigh = 0.0
     dayLow = 0.0
@@ -36,13 +36,13 @@ class testStrategy():
     # 参数列表，保存了参数的名称
     paramList = ['apiKey',
                  'secretKey',
+                 'leverage',
                  'order_log_dir',
                  'order_log_name',
-                 'symbol',
                  'okSymbol',
+                 'currency',
                  'k1',
                  'k2',
-                 'fixedSize',
                  'cut_loss']
 
     # 变量列表，保存了变量的名称
@@ -67,7 +67,7 @@ class testStrategy():
                 if key in setting:
                     d[key] = setting[key]
         print('[INFO]: strat init')
-        print('[INFO]: fixed size: {}\tk1: {}\tk2: {}\tcut_loss: {}'.format(self.fixedSize,
+        print('[INFO]: order qty: {}\tk1: {}\tk2: {}\tcut_loss: {}'.format(self.orderQty,
             self.k1, self.k2, self.cut_loss))
 
         self.okApi = okApi(self.apiKey, self.secretKey, '')
@@ -87,6 +87,7 @@ class testStrategy():
 
     def initPrice(self):
         self.updatePos()
+        self.updateCapital()
         try:
             yyd = (datetime.now() - timedelta(2)).replace(hour=0, minute=0, second=0, microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
             yd = (datetime.now() - timedelta(1)).replace(hour=0, minute=0, second=0, microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -122,7 +123,11 @@ class testStrategy():
         bar.open = float(bar.open); bar.close = float(bar.close); bar.high = float(bar.high); bar.low = float(bar.low)
         ts = bar.datetime.replace(tzinfo=timezone('GMT')).astimezone(timezone('Asia/Singapore'))
         self.cancelAll()
-        self.updatePos()
+        if not self.updatePos():
+            return
+        if not self.updateCapital():
+            return
+        orderQty = self.capital / 10 * self.leverage
 
         print("------------------------------------------------------------------")
         print("[INFO]: {}\t{}\tbar close: {}\tlong entry: {}\tshort entry: {}\trange: {}\ttrade price: {}".format(str(ts),
@@ -152,9 +157,9 @@ class testStrategy():
 
         if self.longPos == 0.0 and self.shortPos == 0.0:
             if bar.close > self.dayOpen and bar.close >= self.longEntry:
-                self.order(self.longEntry, self.fixedSize, BUY)
+                self.order(self.longEntry, self.orderQty, BUY)
             elif bar.close <= self.shortEntry:
-                self.order(self.shortEntry, self.fixedSize, SHORT)
+                self.order(self.shortEntry, self.orderQty, SHORT)
 
         # 持有多头仓位
         elif self.longPos > 0.0:
@@ -165,7 +170,7 @@ class testStrategy():
                 px = self.shortEntry if is_reverse else bar.close
                 self.order(bar.close, int(self.longPos), SELL)
             if is_reverse:
-                self.order(bar.close, self.fixedSize, SHORT)
+                self.order(bar.close, self.orderQty, SHORT)
         # 持有空头仓位
         elif self.shortPos > 0.0:
             # 空头止损单
@@ -175,7 +180,7 @@ class testStrategy():
                 px = self.longEntry if is_reverse else bar.close
                 self.order(bar.close, int(self.shortPos), COVER)
             if is_reverse:
-                self.order(bar.close, self.fixedSize, BUY)
+                self.order(bar.close, self.orderQty, BUY)
       # 发出状态更新事件
         #self.putEvent()
 
@@ -192,12 +197,26 @@ class testStrategy():
                 self.trade_price = float(balance['holding'][0]['short_avg_cost'])
             else:
                 self.trade_price = 0
+            print("[INFO]: {} long pos: {} short pos {}".format(self.okSymbol, self.longPos, self.shortPos))
+            return True
         except Exception as e:
-            print("[ERROR]: {} update pos error {}".format(self.__dict__['okSymbol'], e))
             self.longPos = 0.0
             self.shortPos = 0.0
-            self.trade_price = 0
-        print("[INFO]: %s long pos: %f short pos %f"%(self.okSymbol, self.longPos, self.shortPos))
+            self.trade_price = 0.0
+            print("[ERROR]: update pos error {}, long pos: {}\tshort pos: {}".format(e, self.longPos, self.shortPos))
+            return False
+
+
+    def updateCapital(self):
+        try:
+            res1 = okApi.get_okex("/api/futures/v3/accounts/" + self.currency)
+            res2 = okApi.get_okex("/api/spot/v3/instruments/{}-USDT".format(self.currency.upper()) + "/ticker")
+            self.capital = float(res1['equity'])*float(res2['last'])
+            print("[INFO]: {}".format("account capital {}".format(self.capital)))
+            return True
+        except Exception as e:
+            print("[ERROR]: update capital error {}".format(e))
+            return False
 
     def cancelAll(self):
         try:
