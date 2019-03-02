@@ -18,6 +18,7 @@ class testStrategy():
     shortPos = 0.0
     matchPrice = True
     capital = 0.0
+    orderQty = 0.0
     # 策略变量
     barList = []   # K线对象的列表
     dayOpen = 0.0
@@ -88,6 +89,7 @@ class testStrategy():
     def initPrice(self):
         self.updatePos()
         self.updateCapital()
+        self.orderQty = self.capital / 10 * self.leverage
         try:
             yyd = (datetime.now() - timedelta(2)).replace(hour=0, minute=0, second=0, microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
             yd = (datetime.now() - timedelta(1)).replace(hour=0, minute=0, second=0, microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -127,7 +129,7 @@ class testStrategy():
             return
         if not self.updateCapital():
             return
-        orderQty = self.capital / 10 * self.leverage
+        self.orderQty = self.capital / 10 * self.leverage
 
         print("------------------------------------------------------------------")
         print("[INFO]: {}\t{}\tbar close: {}\tlong entry: {}\tshort entry: {}\trange: {}\ttrade price: {}".format(str(ts),
