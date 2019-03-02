@@ -68,12 +68,11 @@ class testStrategy():
                 if key in setting:
                     d[key] = setting[key]
         print('[INFO]: strat init')
-        print('[INFO]: order qty: {}\tk1: {}\tk2: {}\tcut_loss: {}'.format(self.orderQty,
-            self.k1, self.k2, self.cut_loss))
-
         self.okApi = okApi(self.apiKey, self.secretKey, '')
         # 载入历史数据，并采用回放计算的方式初始化策略数值
         self.initPrice()
+        print('[INFO]: order qty: {}\tk1: {}\tk2: {}\tcut_loss: {}'.format(self.orderQty,
+            self.k1, self.k2, self.cut_loss))
         #self.putEvent()
     #----------------------------------------------------------------------
     def onStop(self):
